@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Zenstatics – Enter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --accent: #22d3ee;
+      --accent-2: #c084fc;
+      --accent-hot: #f97316;
+      --bg: #020617;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, #020617 0, #020617 30%, #020308 65%, #000000 100%);
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* neon background orbs */
+    .orb {
+      position: fixed;
+      border-radius: 999px;
+      filter: blur(40px);
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: -3;
+    }
+    .orb.orb-1 {
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, var(--accent-2), transparent 60%);
+      top: -40px;
+      left: -40px;
+      animation: float 18s ease-in-out infinite alternate;
+    }
+    .orb.orb-2 {
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, var(--accent), transparent 60%);
+      bottom: -80px;
+      right: -40px;
+      animation: float 22s ease-in-out infinite alternate;
+    }
+
+    @keyframes float {
+      0%   { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(26px, -22px, 0); }
+    }
+
+    /* subtle neon grid overlay */
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(15, 23, 42, 0.7) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.7) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.3;
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    .landing-shell {
+      padding: 24px;
+      width: 100%;
+      max-width: 880px;
+    }
+
+    .landing {
+      position: relative;
+      padding: 32px 26px 30px;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at top left, rgba(34, 211, 238, 0.16), rgba(15, 23, 42, 0.96));
+      border: 1px solid rgba(148, 163, 253, 0.7);
+      box-shadow:
+        0 28px 80px rgba(0, 0, 0, 1),
+        0 0 40px rgba(56, 189, 248, 0.55);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 26px;
+    }
+
+    .landing::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      background:
+        conic-gradient(
+          from 180deg,
+          rgba(34, 211, 238, 0.0),
+          rgba(34, 211, 238, 0.4),
+          rgba(192, 132, 252, 0.0),
+          rgba(249, 115, 22, 0.35),
+          rgba(34, 211, 238, 0.0)
+        );
+      opacity: 0.14;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 11px 4px 5px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 253, 0.75);
+      background: radial-gradient(circle at top left, rgba(129, 140, 248, 0.26), rgba(15, 23, 42, 0.96));
+      margin-bottom: 16px;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(226, 232, 240, 0.9);
+    }
+
+    .pill-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: conic-gradient(from 160deg, var(--accent), var(--accent-2), var(--accent-hot), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.9);
+    }
+
+    .pill-dot-inner {
+      width: 9px;
+      height: 9px;
+      border-radius: inherit;
+      background: #020617;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      margin-bottom: 6px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(148, 163, 253, 0.9);
+    }
+
+    /* main hero text */
+    .welcome-text {
+      font-size: 40px;
+      line-height: 1;
+      margin: 0;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(248, 250, 252, 0.98);
+      text-shadow:
+        0 0 10px rgba(34, 211, 238, 0.8),
+        0 0 22px rgba(34, 211, 238, 0.8);
+    }
+
+    .welcome-text span {
+      display: block;
+    }
+
+    .welcome-text .word-welcome {
+      font-size: 42px;
+      font-weight: 800;
+    }
+
+    .welcome-text .word-to {
+      font-size: 18px;
+      margin-top: 8px;
+      letter-spacing: 0.32em;
+      color: rgba(148, 163, 253, 0.95);
+      text-shadow: none;
+    }
+
+    .welcome-text .word-zen {
+      margin-top: 2px;
+      font-size: 30px;
+      letter-spacing: 0.24em;
+      color: rgba(248, 250, 252, 0.96);
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: rgba(209, 213, 219, 0.9);
+      margin: 16px 0 18px;
+      max-width: 34rem;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      font-size: 11px;
+      color: rgba(148, 163, 253, 0.9);
+      margin-bottom: 20px;
+    }
+
+    .meta span::before {
+      content: "• ";
+      color: rgba(148, 163, 253, 0.9);
+    }
+
+    /* left column: text + newsletter */
+    .left-col {
+      min-width: 0;
+    }
+
+    /* newsletter-style form */
+    .newsletter {
+      margin-top: 6px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(30, 64, 175, 0.8);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.98));
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .newsletter-copy {
+      flex: 1 1 180px;
+      min-width: 0;
+    }
+
+    .newsletter-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(191, 219, 254, 0.95);
+      margin: 0 0 4px;
+    }
+
+    .newsletter-sub {
+      font-size: 12px;
+      color: rgba(148, 163, 253, 0.9);
+      margin: 0;
+    }
+
+    .newsletter-cta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .email-field {
+      border-radius: 999px;
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 1));
+      color: #e5e7eb;
+      padding: 7px 12px;
+      font-size: 12px;
+      min-width: 160px;
+      outline: none;
+      box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.8);
+    }
+
+    .email-field::placeholder {
+      color: rgba(100, 116, 139, 0.95);
+    }
+
+    .email-btn {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(37, 99, 235, 0.0);
+      background:
+        radial-gradient(circle at 0 0, rgba(59, 130, 246, 0.35), transparent 55%),
+        linear-gradient(135deg, #22c55e, #0ea5e9);
+      color: #020617;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow:
+        0 0 18px rgba(56, 189, 248, 0.5),
+        0 10px 26px rgba(0, 0, 0, 0.9);
+      transition: transform 0.17s ease, box-shadow 0.17s ease, filter 0.17s ease;
+    }
+
+    .email-btn:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+      box-shadow:
+        0 0 26px rgba(56, 189, 248, 0.8),
+        0 14px 34px rgba(0, 0, 0, 1);
+    }
+
+    .email-btn:active {
+      transform: translateY(0);
+      box-shadow:
+        0 0 12px rgba(56, 189, 248, 0.7),
+        0 6px 18px rgba(0, 0, 0, 0.95);
+    }
+
+    .microcopy {
+      margin-top: 10px;
+      font-size: 11px;
+      color: rgba(148, 163, 253, 0.85);
+    }
+
+    .microcopy a {
+      color: rgba(94, 234, 212, 0.9);
+      text-decoration: none;
+    }
+
+    /* right column: 3D mockup card */
+    .mockup-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 900px;
+    }
+
+    .mockup-card {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      border-radius: 24px;
+      padding: 18px 16px 16px;
+      background:
+        radial-gradient(circle at top left, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.98));
+      border: 1px solid rgba(148, 163, 253, 0.9);
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.95),
+        0 0 40px rgba(192, 132, 252, 0.6);
+      transform-style: preserve-3d;
+      animation: tilt-loop 7s ease-in-out infinite alternate;
+      overflow: hidden;
+    }
+
+    .mockup-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        conic-gradient(
+          from 200deg,
+          rgba(34, 211, 238, 0.0),
+          rgba(34, 211, 238, 0.45),
+          rgba(192, 132, 252, 0.0),
+          rgba(249, 115, 22, 0.45),
+          rgba(34, 211, 238, 0.0)
+        );
+      opacity: 0.25;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    @keyframes tilt-loop {
+      0% {
+        transform: rotateX(12deg) rotateY(-14deg) translateY(0);
+      }
+      100% {
+        transform: rotateX(18deg) rotateY(8deg) translateY(-6px);
+      }
+    }
+
+    .mockup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      font-size: 11px;
+      color: rgba(148, 163, 253, 0.9);
+    }
+
+    .mockup-logo {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(248, 250, 252, 0.96);
+    }
+
+    .mockup-badge {
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.8);
+      font-size: 10px;
+      color: rgba(190, 242, 100, 0.95);
+    }
+
+    .mockup-screen {
+      border-radius: 16px;
+      padding: 14px 12px;
+      background:
+        radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 1));
+      border: 1px solid rgba(30, 64, 175, 0.9);
+      box-shadow:
+        inset 0 0 0 1px rgba(15, 23, 42, 0.95),
+        0 0 22px rgba(56, 189, 248, 0.35);
+    }
+
+    .mockup-bars {
+      height: 66px;
+      border-radius: 14px;
+      background:
+        linear-gradient(135deg, rgba(34, 211, 238, 0.05), rgba(192, 132, 252, 0.18));
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      padding: 8px;
+    }
+
+    .mockup-bar {
+      flex: 1;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, rgba(244, 244, 245, 0.18), rgba(15, 23, 42, 1));
+      box-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+    }
+
+    .mockup-bar:nth-child(1) { height: 18%; }
+    .mockup-bar:nth-child(2) { height: 42%; }
+    .mockup-bar:nth-child(3) { height: 68%; }
+    .mockup-bar:nth-child(4) { height: 38%; }
+    .mockup-bar:nth-child(5) { height: 54%; }
+
+    .mockup-footer {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: rgba(148, 163, 253, 0.9);
+    }
+
+    .mockup-chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, rgba(34, 211, 238, 0.2), transparent 60%);
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      color: rgba(226, 232, 240, 0.96);
+    }
+
+    .mockup-pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 253, 0.6);
+    }
+
+    /* separate enter-site button under mockup on small screens */
+    .enter-row {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .enter-label {
+      font-size: 11px;
+      color: rgba(148, 163, 253, 0.9);
+    }
+
+    .enter-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(251, 191, 36, 0.0);
+      background:
+        radial-gradient(circle at 0 0, rgba(253, 224, 71, 0.24), transparent 55%),
+        linear-gradient(135deg, var(--accent-hot), #eab308);
+      color: #020617;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 20px;
+      box-shadow:
+        0 0 22px rgba(251, 191, 36, 0.75),
+        0 10px 26px rgba(0, 0, 0, 0.9);
+      transition: transform 0.17s ease, box-shadow 0.17s ease, filter 0.17s ease;
+    }
+
+    .enter-arrow:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+      box-shadow:
+        0 0 30px rgba(251, 191, 36, 0.9),
+        0 14px 34px rgba(0, 0, 0, 1);
+    }
+
+    .enter-arrow:active {
+      transform: translateY(0);
+      box-shadow:
+        0 0 12px rgba(251, 191, 36, 0.7),
+        0 6px 18px rgba(0, 0, 0, 0.95);
+    }
+
+    @media (max-width: 768px) {
+      .landing {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 24px 18px 24px;
+      }
+      .mockup-wrap {
+        margin-top: 8px;
+      }
+      .welcome-text {
+        font-size: 30px;
+      }
+      .welcome-text .word-welcome {
+        font-size: 32px;
+      }
+      .welcome-text .word-zen {
+        font-size: 22px;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .newsletter {
+        padding: 12px 10px;
+      }
+      .newsletter-cta {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="grid-overlay"></div>
+
+  <div class="landing-shell">
+    <main class="landing" aria-labelledby="zenstatics-heading">
+      <div class="left-col">
+        <div class="pill">
+          <span class="pill-dot"><span class="pill-dot-inner"></span></span>
+          <span>Studio access • v1</span>
+        </div>
+
+        <p class="eyebrow">Dark‑mode web studio</p>
+
+        <h1 id="zenstatics-heading" class="welcome-text">
+          <span class="word-welcome"><strong>WELCOME</strong></span>
+          <span class="word-to">TO</span>
+          <span class="word-zen">ZENSTATICS</span>
+        </h1>
+
+        <p class="subtitle">
+          Neon‑lit, conversion‑driven web experiences for founders who want their product to feel
+          as sharp and intentional as it performs.
+        </p>
+
+        <div class="meta">
+          <span>Single‑founder studio</span>
+          <span>High‑contrast visuals</span>
+          <span>Framer & Webflow friendly</span>
+        </div>
+
+        <section class="newsletter" aria-label="Zenstatics newsletter">
+          <div class="newsletter-copy">
+            <p class="newsletter-title">Studio dispatch</p>
+            <p class="newsletter-sub">
+              Leave an email to stay in the loop as Zenstatics evolves and new layouts ship.
+            </p>
+          </div>
+          <form class="newsletter-cta" onsubmit="event.preventDefault();">
+            <input
+              type="email"
+              class="email-field"
+              placeholder="you@example.com"
+              aria-label="Email address"
+            />
+            <button type="submit" class="email-btn">
+              Notify me
+            </button>
+          </form>
+        </section>
+
+        <p class="microcopy">
+          Hook this into your favourite email tool later — the layout is ready when you are.
+        </p>
+      </div>
+
+      <div class="mockup-wrap" aria-hidden="true">
+        <div class="mockup-card">
+          <div class="mockup-header">
+            <span class="mockup-logo">ZENSTATICS</span>
+            <span class="mockup-badge">live concept</span>
+          </div>
+          <div class="mockup-screen">
+            <div class="mockup-bars">
+              <div class="mockup-bar"></div>
+              <div class="mockup-bar"></div>
+              <div class="mockup-bar"></div>
+              <div class="mockup-bar"></div>
+              <div class="mockup-bar"></div>
+            </div>
+            <div class="mockup-footer">
+              <span class="mockup-chip">Conversion view</span>
+              <span class="mockup-pill">Dark mode • Neon</span>
+            </div>
+          </div>
+
+          <div class="enter-row">
+            <span class="enter-label">Jump straight into the Zenstatics v1 experience.</span>
+            <!-- Separate button to enter the actual site -->
+            <a href="2index.html" class="enter-arrow" aria-label="Enter Zenstatics v1">
+              →
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
